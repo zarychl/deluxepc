@@ -1,0 +1,173 @@
+table.dataTable-wrapper.no-header table.dataTable-container {
+	border-top: 1px solid #d9d9d9;
+}
+
+table.dataTable-wrapper.no-footer table.dataTable-container {
+	border-bottom: 1px solid #d9d9d9;
+}
+
+table.dataTable-top,
+table.dataTable-bottom {
+	padding: 8px 10px;
+}
+
+table.dataTable-top > nav:first-child,
+table.dataTable-top > div:first-child,
+table.dataTable-bottom > nav:first-child,
+table.dataTable-bottom > div:first-child {
+	float: left;
+}
+
+table.dataTable-top > nav:last-child,
+table.dataTable-top > div:last-child,
+table.dataTable-bottom > nav:last-child,
+table.dataTable-bottom > div:last-child {
+	float: right;
+}
+
+table.dataTable-selector {
+	padding: 6px;
+}
+
+table.dataTable-input {
+	padding: 6px 12px;
+}
+
+table.dataTable-info {
+	margin: 7px 0;
+}
+
+/* PAGER */
+table.dataTable-pagination ul {
+	margin: 0;
+	padding-left: 0;
+}
+
+table.dataTable-pagination li {
+	list-style: none;
+	float: left;
+}
+
+table.dataTable-pagination a {
+	border: 1px solid transparent;
+	float: left;
+	margin-left: 2px;
+	padding: 6px 12px;
+	position: relative;
+	text-decoration: none;
+	color: #333;
+}
+
+table.dataTable-pagination a:hover {
+	background-color: #d9d9d9;
+}
+
+table.dataTable-pagination .active a,
+table.dataTable-pagination .active a:focus,
+table.dataTable-pagination .active a:hover {
+	background-color: #d9d9d9;
+	cursor: default;
+}
+
+table.dataTable-pagination .ellipsis a,
+table.dataTable-pagination .disabled a,
+table.dataTable-pagination .disabled a:focus,
+table.dataTable-pagination .disabled a:hover {
+	cursor: not-allowed;
+}
+
+table.dataTable-pagination .disabled a,
+table.dataTable-pagination .disabled a:focus,
+table.dataTable-pagination .disabled a:hover {
+	cursor: not-allowed;
+	opacity: 0.4;
+}
+
+table.dataTable-pagination .pager a {
+	font-weight: bold;
+}
+
+/* TABLE */
+table.dataTable-table {
+	max-width: 100%;
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: separate;
+}
+
+table.dataTable-table > tbody > tr > td,
+table.dataTable-table > tbody > tr > th,
+table.dataTable-table > tfoot > tr > td,
+table.dataTable-table > tfoot > tr > th,
+table.dataTable-table > thead > tr > td,
+table.dataTable-table > thead > tr > th {
+	vertical-align: top;
+	padding: 8px 10px;
+}
+
+table.dataTable-table > thead > tr > th {
+	vertical-align: bottom;
+	text-align: left;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+table.dataTable-table > tfoot > tr > th {
+	vertical-align: bottom;
+	text-align: left;
+	border-top: 1px solid #d9d9d9;
+}
+
+table.dataTable-table th {
+	vertical-align: bottom;
+	text-align: left;
+}
+
+table.dataTable-table th a {
+	text-decoration: none;
+	color: inherit;
+}
+
+table.dataTable-sorter {
+	display: inline-block;
+	height: 100%;
+	position: relative;
+	width: 100%;
+}
+
+table.dataTable-sorter::before,
+table.dataTable-sorter::after {
+	content: "";
+	height: 0;
+	width: 0;
+	position: absolute;
+	right: 4px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	opacity: 0.2;
+}
+
+table.dataTable-sorter::before {
+	border-top: 4px solid #000;
+	bottom: 0px;
+}
+
+table.dataTable-sorter::after {
+	border-bottom: 4px solid #000;
+	border-top: 4px solid transparent;
+	top: 0px;
+}
+
+.asc table.dataTable-sorter::after,
+.desc table.dataTable-sorter::before {
+	opacity: 0.6;
+}
+
+table.dataTables-empty {
+	text-align: center;
+}
+
+table.dataTable-top::after, table.dataTable-bottom::after {
+	clear: both;
+	content: " ";
+	display: table;
+}
