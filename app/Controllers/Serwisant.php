@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\SerwisantModel;
 use App\Models\ZleceniaModel;
+use App\libraries\Breadcrumb;
 
 class Serwisant extends BaseController
 {
@@ -12,4 +13,16 @@ class Serwisant extends BaseController
     public function __construct() {
 		$this->serwisant_model = new SerwisantModel();
 	}
+  
+  public function getBreadcrumbs()
+  {
+      $this->breadcrumb = new Breadcrumb();
+      return $this->breadcrumb->buildAuto();
+  }
+
+  public function index()
+  {
+      return view('serwisanci');
+  }
+
 }

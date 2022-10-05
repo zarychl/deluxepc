@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\SerwisantModel;
 use App\Models\ZleceniaModel;
+use App\libraries\Breadcrumb;
+
 
 class Zlecenia extends BaseController
 {
@@ -18,15 +20,28 @@ class Zlecenia extends BaseController
     {
         return view('zlecenia');
     }
-
 	public function __construct() {
 		$this->zlecenie_model = new ZleceniaModel();
 	}
 
+    public function Dodaj()
+    {
+        return view('zleceniaDodaj');
+    }
+
     public function Details($id = NULL)
     {
-        $data['id'] = $id;
+        $uri = current_url(true);
+        $data['id'] = $uri->getSegment(4,0);
+        if($data['id'] == 0) return  view('zlecenia', $data);
+        //$uri->getSegment(3,0);
         return view('zleceniaDetails', $data);
+    }
+
+    public function getBreadcrumbs()
+    {
+        $this->breadcrumb = new Breadcrumb();
+        return $this->breadcrumb->buildAuto();
     }
 
     private function getStatus($id)
@@ -50,13 +65,20 @@ class Zlecenia extends BaseController
             break;
         }
     }
+    public function getZlecenie($id)
+    {
+        $z = $this->zlecenie_model->find($id);
+        if($z == NULL) return -1;
+
+        return $z;
+    }
     public function displayZleceniaTable()
     {
         $allZlecenia = $this->zlecenie_model->findAll();
         $sM = new SerwisantModel();
 
         echo '<div class="card-body">
-        <table id="datatablesZlecenia" class="table table-striped table-bordered dt-responsive nowrap">
+        <table id="datatablesZlecenia" class="display table table-striped table-hover">
             <thead>
                 <tr>
                     <th>Nr</th>
@@ -81,7 +103,7 @@ class Zlecenia extends BaseController
 
         foreach($allZlecenia as $r)
         {
-            echo '<tr>';
+            echo '<tr class="clickable-row" data-href="/Zlecenia/Details/'. $r['id'] .'">';
             echo '<td>'. $r['id'] .'</td>';
             echo '<td>'. $r['nazwa'] .'</td>';
             echo '<td>'. $r['serial'] .'</td>';

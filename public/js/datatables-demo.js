@@ -5,4 +5,9 @@ $(document).ready(function() {
       "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"
    }
   });
+  $('#datatablesKlientSelect').DataTable({
+    "language": {
+      "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/pl.json"
+   }
+  });
 });

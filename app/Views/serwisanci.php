@@ -1,9 +1,9 @@
 <?php
 include_once("parts/head.php");
-use App\Controllers\Zlecenia;
 
-$zC = new Zlecenia();
-$z = $zC->getZlecenie($id);
+use App\Controllers\Serwisant;
+
+$sC = new Serwisant();
 ?>
 <div id="layoutSidenav">
 
@@ -12,19 +12,17 @@ $z = $zC->getZlecenie($id);
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Zlecenie <span style="color:gray">#<?php echo $z['id'] ?> </span>- Szczegóły <span style="color:gray">[<?php echo $z['nazwa'] ?>]</span></h1>
+                <h1 class="mt-4">Serwisanci</h1>
                 <ol class="breadcrumb mb-4">
-                    <?php echo $zC->getBreadcrumbs(); ?>
+                <?php echo $sC->getBreadcrumbs(); ?>
                 </ol>
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Zlecenia
+                        Serwisanci
                     </div>
                     <div class="card-body">
-                        <?php 
-                        print_r($z);
-                        ?>
+                        <?php ?>
                     </div>
                 </div>
             </div>
