@@ -2,8 +2,12 @@
 include_once("parts/head.php");
 
 use App\Controllers\Zlecenia;
+use App\Controllers\Klient;
 
 $zC = new Zlecenia();
+$kC = new Klient();
+
+$allKlienci = $kC->getAllKlienci();
 ?>
 <div id="layoutSidenav">
 
@@ -21,10 +25,22 @@ $zC = new Zlecenia();
                     <input class="form-control" hidden id="klientId" name="klientId">
                     
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                         <label>Klient:</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" disabled id="klient" name="klient">
+                                <!-- <input type="text" class="form-control" disabled id="klient" name="klient"> -->
+
+                                <select class="form-control" value="" disabled name="klient" id="klient">
+                                    <option></option>
+                                    <?php 
+                                        foreach($allKlienci as $k)
+                                        {
+                                            echo '<option value="'. $k['id'] .'">' . $kC->getKlientVCard($k['id']) . '</option>';
+                                        }
+                                    ?>
+                                    
+                                </select>
+
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button" id="klientSelect">Wybierz</button>
                                 </div>
@@ -113,29 +129,21 @@ $zC = new Zlecenia();
 
                             </div>
 
+
+                                    <div class="row">
+                                        <div class="col-3 float-right">
+                                <button class="btn btn-success" type="submit" value="Submit"><i class="fa-solid fa-plus"></i> Dodaj</button>
+                                    </div>
+                                    </div>
                         </div>
+
+            
                     </form>
 
                     </div>
                 </div>
             </div>
         </main>
-
-        <script>
-        checkEkspres = document.getElementById('czy_ekspres').addEventListener('click', event => {
-            if(event.target.checked) {
-                document.getElementById('dni_naprawy').value = 1;
-            }
-            else
-            {
-                document.getElementById('dni_naprawy').value= 7;
-            }
-        });
-
-        $("#klientSelect").click(function (){
-            $("#klientModal").modal("show");
-        });
-        </script>
 
 
         <!-- Modal Wybor klienta-->
@@ -156,12 +164,18 @@ $zC = new Zlecenia();
                 </thead>
 
                 <tbody>
-                <tr>
-                    <td>1</td><td>Jan Kowalski</td><td>Stacyjkowo 154</td><td>123 456 789</td><td>jan@kowal.pl</td><td><button type="button" class="btn btn-primary"><i class="fa-solid fa-arrow-right-to-bracket"></i> Wybierz</button></td>
-                </tr>
-                <tr>
-                    <td>2</td><td>Adam Nowak</td><td>Stacyjkowo 44</td><td>123 456 789</td><td>adam@nowak.pl</td><td><button type="button" class="btn btn-primary"><i class="fa-solid fa-arrow-right-to-bracket"></i> Wybierz</button></td>
-                </tr>
+                <?php 
+                    foreach($allKlienci as $k)
+                    {
+                        echo '<tr><td>'. $k['id'] .'</td>
+                            <td>'. $k['nazwa'] .'</td>
+                            <td>'. $k['ulica'] . ", " . $k['kod'] . " " . $k['miasto'] .'</td>
+                            <td>'. $k['tel1'] . "<br>" . $k['tel2'] .'</td>
+                            <td>'. $k['nip'] .'</td>
+                            <td><button id="getklient" data-klientid="'. $k['id']  .'" type="button" class="btn btn-primary"><i class="fa-solid fa-arrow-right-to-bracket"></i> Wybierz</button></td></tr>';
+                    }
+                    
+                ?>
                 </tbody>
                 </table>
            <!-- end tabekla -->
@@ -170,5 +184,26 @@ $zC = new Zlecenia();
         </div>
         </div>
 
+        
 
+        <script>
+        checkEkspres = document.getElementById('czy_ekspres').addEventListener('click', event => {
+            if(event.target.checked) {
+                document.getElementById('dni_naprawy').value = 1;
+            }
+            else
+            {
+                document.getElementById('dni_naprawy').value= 7;
+            }
+        });
+
+        $("#klientSelect").click(function (){
+            $("#klientModal").modal("show");
+        });
+
+        $("#getklient").click(function (){
+            document.getElementById('klient').value = $("#getklient").data("klientid");
+            $("#klientModal").modal("hide");
+        });
+        </script>
         <?php include_once("parts/foot.php"); ?>
