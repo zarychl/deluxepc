@@ -23,5 +23,5 @@ class ZleceniaModel extends Model
 
     protected $validationRules    = [];
     protected $validationMessages = [];
-    protected $skipValidation     = false;
+    protected $skipValidation     = true;
 }

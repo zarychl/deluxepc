@@ -3,14 +3,17 @@ include_once("parts/head.php");
 
 use App\Controllers\Zlecenia;
 use App\Controllers\Klient;
+use App\Controllers\Serwisant;
 
 $zC = new Zlecenia();
 $kC = new Klient();
+$sC = new Serwisant();
+
+$serwisant = $sC->getCurrent();
 
 $allKlienci = $kC->getAllKlienci();
 ?>
 <div id="layoutSidenav">
-
     <?php include_once("parts/sidenav.php"); ?>
 
     <div id="layoutSidenav_content">
@@ -19,11 +22,11 @@ $allKlienci = $kC->getAllKlienci();
                 <h1 class="mt-4">Zlecenia - Dodaj nowe</h1>
                 <div class="card mb-4">
                     <div class="card-body">
-                        
-                    <form class="insert-form">
+
+                    <?= \Config\Services::session()->getFlashdata('msg'); ?>
+                    <form class="insert-form" method="post" action="<?= base_url() ?>/Zlecenia/Dodaj">
 
                     <input class="form-control" hidden id="klientId" name="klientId">
-                    
                     <div class="row">
                         <div class="col-5">
                         <label>Klient:</label>
@@ -49,8 +52,8 @@ $allKlienci = $kC->getAllKlienci();
 
                         <div class="col-4">
                             <label>Serwisant: </label>
-                            <input class="form-control" hidden id="serwisantId" name="serwisantId">
-                            <input class="form-control" disabled id="serwisant" name="serwisant">
+                            <input value="<?php echo $serwisant['id']; ?>" class="form-control" hidden id="serwisantId" name="serwisantId">
+                            <input value="<?php echo $serwisant['nazwisko'] . " " . $serwisant['imie'] . " #" . $serwisant['id']; ?>" class="form-control" disabled id="serwisant" name="serwisant">
                         </div>
                     </div>
 
@@ -129,12 +132,12 @@ $allKlienci = $kC->getAllKlienci();
 
                             </div>
 
+                            <div class="card-footer">
+                            <div class="col">
+                                <button class="btn btn-success float-end" type="submit" value="Submit"><i class="fa-solid fa-plus"></i> Dodaj</button>
+                                    </div>
+                            </div>
 
-                                    <div class="row">
-                                        <div class="col-3 float-right">
-                                <button class="btn btn-success" type="submit" value="Submit"><i class="fa-solid fa-plus"></i> Dodaj</button>
-                                    </div>
-                                    </div>
                         </div>
 
             

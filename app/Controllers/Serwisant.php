@@ -20,6 +20,18 @@ class Serwisant extends BaseController
       return $this->breadcrumb->buildAuto();
   }
 
+  public function getCurrent()
+  {
+    $curr = $this->serwisant_model->find('1');
+    return $curr;
+  }
+
+  public function getAll()
+  {
+    $all = $this->serwisant_model->findAll();
+    return $all;
+  }
+
   public function index()
   {
       return view('serwisanci');

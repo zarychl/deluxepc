@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\Controller;
 use App\Models\SerwisantModel;
 use App\Models\ZleceniaModel;
 use App\libraries\Breadcrumb;
+
 
 
 class Zlecenia extends BaseController
@@ -26,8 +28,46 @@ class Zlecenia extends BaseController
 
     public function Dodaj()
     {
-        return view('zleceniaDodaj');
+        $session = \Config\Services::session();
+		$data = $this->request->getVar();
+        $session->setFlashdata('msg', '');
+        if(!empty($data))
+        {
+        //if($validation->check('nazwa', 'required')) e
+
+		$validation = \Config\Services::validation();
+
+        $validation->setRules([
+            'nazwa' => 'required|string',
+            'serial' => 'required|string',
+            'opis_usterki' => 'required|string',
+            'data_przyjecia' => 'required',
+            'dni_naprawy' => 'required|integer',
+            'id_klient' => 'required|integer',
+            'id_serwisant' => 'required|integer',
+        ]);
+		if($validation->withRequest($this->request)->run()){
+            $session->setFlashdata('msg', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>fdfsdfsdfdsfe!</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+
+         }
+         else
+         {
+			
+			try{
+				$this->zlecenie_model->insert($data);
+                $session->setFlashdata('msg', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Zlecenie dodane pomyślnie!</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+
+            }
+			catch(\Exception $e){
+                $session->setFlashdata('msg', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Nie działa :(<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+			}
+         }
+        }
+		echo view('zleceniaDodaj',$data);
+
     }
+
+
 
     public function Details($id = NULL)
     {
@@ -43,6 +83,8 @@ class Zlecenia extends BaseController
         $this->breadcrumb = new Breadcrumb();
         return $this->breadcrumb->buildAuto();
     }
+
+    
 
     private function getStatus($id)
     {
@@ -110,8 +152,10 @@ class Zlecenia extends BaseController
             echo '<td>'. $r['data_przyjecia'] .'</td>';
 
             $s = $sM->find($r['id_serwisant']);
-
-            echo '<td>'. $s['nazwisko'] . " " . $s['imie'] .'</td>';
+            if(!isset($s['nazwisko']))
+                echo '<td class="text-danger">Brak!</td>';
+            else    
+                echo '<td>'. $s['nazwisko'] . " " . $s['imie'] .'</td>';
 
             echo '<td style="font-weight:bold;" class="'. $this->statusInfo[$r['status']][0] .'">'. $this->statusInfo[$r['status']][1] .'</td>';
             echo '</tr>';
