@@ -26,7 +26,11 @@ class Klient extends BaseController
 
     return $allKlienci;
   }
-
+  public function getKlient($id)
+  {
+    $k = $this->klient_model->find($id);
+    return $k;
+  }
   public function getKlientVCard($id)
   {
     $k = $this->klient_model->find($id);

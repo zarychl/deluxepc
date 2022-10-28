@@ -13,8 +13,8 @@ class Zlecenia extends BaseController
 {
     public $zlecenie_model;
     private $statusInfo = [
-        ["text-warning", "Oczekuje na naprawę"],
-        ["text-danger", "W naprawie"],
+        ["text-danger", "Oczekuje na naprawę"],
+        ["text-warning", "W naprawie"],
         ["text-success", "Oczekuje na odbiór przez klienta"],
         ["text-secondary", "Odebrane przez klienta"]
     ];
@@ -67,8 +67,6 @@ class Zlecenia extends BaseController
 
     }
 
-
-
     public function Details($id = NULL)
     {
         $uri = current_url(true);
@@ -114,6 +112,130 @@ class Zlecenia extends BaseController
 
         return $z;
     }
+    public function Zakoncz($id, $opis_naprawy)
+    {
+        $date = date("Y-m-d h:i:s");
+        $zM = new ZleceniaModel();
+        $data = [
+            'id' => $id,
+            'opis_naprawy' => $opis_naprawy,
+            'data_naprawy' => $date,
+            'status' => 2
+        ];
+        
+        $zM->save($data);
+    }
+    public function Rozpocznij($id)
+    {
+        $zM = new ZleceniaModel();
+        $data = [
+            'id' => $id,
+            'status' => 1
+        ];
+        
+        $zM->save($data);
+    }
+    public function PotwierdzOdbior($id)
+    {
+        $date = date("Y-m-d h:i:s");
+        $zM = new ZleceniaModel();
+        $data = [
+            'id' => $id,
+            'status' => 3,
+            'data_odbioru' => $date
+        ];
+        
+        $zM->save($data);
+    }
+    public function PonownieRozpocznij($id)
+    {
+        $zM = new ZleceniaModel();
+        $data = [
+            'id' => $id,
+            'status' => 1,
+            'data_naprawy' => NULL,
+            'data_odbioru' => NULL
+        ];
+        
+        $zM->save($data);
+    }
+    public function listUslugi($id)
+    {
+        $z = $this->zlecenie_model->find($id);
+        $firstRun = 1;
+        $str = array();
+        if($z['czy_gwarancja']) array_push($str, "gwarancja");
+        if($z['czy_ekspres']) array_push($str, "ekspres");
+        if($z['czy_zewn']) array_push($str, "serwis zewnętrzny");
+        
+        $ret = '';
+        $fR = 1;
+        foreach($str as $e)
+        {
+            if($fR)
+            {
+                $fR = 0;
+                $ret .= ucfirst($e). ", ";
+            }
+            else
+            {
+                $ret .= $e . ", ";
+            }
+        }
+        $ret = substr($ret, 0,-2);
+
+        return $ret;
+    }
+    public function listZestaw($id)
+    {
+        $z = $this->zlecenie_model->find($id);
+        $firstRun = 1;
+        $str = array();
+        if($z['czy_kable']) array_push($str, "kable");
+        if($z['czy_opak']) array_push($str, "opakowanie");
+        if($z['czy_zasilacz']) array_push($str, "zasilacz");
+        if($z['czy_plyty']) array_push($str, "płyty");
+        
+        $ret = '';
+        $fR = 1;
+        foreach($str as $e)
+        {
+            if($fR)
+            {
+                $fR = 0;
+                $ret .= ucfirst($e). ", ";
+            }
+            else
+            {
+                $ret .= $e . ", ";
+            }
+        }
+        $ret = substr($ret, 0,-2);
+
+        if($z['wyp_inne'] != "") $ret .= "<br>" . $z['wyp_inne'];
+
+        return $ret;
+    }
+    public function getZlecenieStatusBadge($id)
+    {
+        $z = $this->zlecenie_model->find($id);
+        switch($z['status'])
+        {
+            case 0:
+                echo '<span class="badge bg-danger fs-6 text-wrap">Oczekuje na naprawę</span>';
+            break;
+            case 1:
+                echo '<span class="badge bg-warning fs-6 text-wrap">W naprawie</span>';
+            break;
+            case 2:
+                echo '<span class="badge bg-success fs-6 text-wrap">Gotowe do odbioru</span>';
+            break;
+            case 3:
+                echo '<span class="badge bg-secondary fs-6 text-wrap">Odebrane przez klienta</span>';
+            break;
+        }
+    }
+
     public function displayZleceniaTable()
     {
         $allZlecenia = $this->zlecenie_model->findAll();

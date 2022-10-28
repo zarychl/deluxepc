@@ -27,6 +27,18 @@ window.addEventListener('DOMContentLoaded', event => {
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
+
+    // Check to see if Media-Queries are supported
+    if (window.matchMedia) {
+        // Check if the dark-mode Media-Query matches
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+            $("#favicon").attr("href","/iconD.png");// Dark
+        } else {
+            $("#favicon").attr("href","/iconW.png");// Light
+        }
+    } else {
+        $("#favicon").attr("href","/iconW.png");
+    }
 });
 
 });

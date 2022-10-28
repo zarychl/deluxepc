@@ -19,7 +19,11 @@ class Serwisant extends BaseController
       $this->breadcrumb = new Breadcrumb();
       return $this->breadcrumb->buildAuto();
   }
-
+  public function getSerwisantVCard($id){
+    $s = $this->serwisant_model->find($id);
+    
+    return $s['nazwisko'] . " " . $s['imie'] . " #" . $s['id'];
+  }
   public function getCurrent()
   {
     $curr = $this->serwisant_model->find('1');
