@@ -1,4 +1,11 @@
 <div id="layoutSidenav_nav">
+<?php
+use App\Controllers\Serwisant;
+$sC = new Serwisant;
+
+$currSerwisant = $sC->getCurrent();
+$currSerwisant = $currSerwisant['nazwisko'] . " " . $currSerwisant['imie'];
+?>
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
@@ -10,8 +17,8 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <div class="small">Zalogowano jako:</div>
+                        <b><?php echo $currSerwisant; ?></b>
                     </div>
                 </nav>
             </div>

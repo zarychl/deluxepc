@@ -5,6 +5,7 @@ use App\Controllers\Zlecenia;
 
 $zC = new Zlecenia();
 ?>
+<meta http-equiv="Refresh" content="0; url='/Zlecenia'" />
 <div id="layoutSidenav">
 
     <?php include_once("parts/sidenav.php"); ?>

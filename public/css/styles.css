@@ -4797,6 +4797,12 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+.uslugi-table tfoot tr th:first-child
+{
+  text-align: right;
+  font-weight: normal;
+}
+
 .insert-form input
 {
   margin-bottom:7px;

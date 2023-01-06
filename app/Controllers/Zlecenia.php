@@ -1,13 +1,15 @@
 <?php
-
 namespace App\Controllers;
-
 use CodeIgniter\Controller;
 use App\Models\SerwisantModel;
 use App\Models\ZleceniaModel;
+use App\Models\ZleceniaUslugiModel;
+use App\Controllers\Login;
 use App\libraries\Breadcrumb;
-
-
+use App\Models\UslugiModel;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 class Zlecenia extends BaseController
 {
@@ -18,11 +20,23 @@ class Zlecenia extends BaseController
         ["text-success", "Oczekuje na odbiór przez klienta"],
         ["text-secondary", "Odebrane przez klienta"]
     ];
+    public function initController(
+        RequestInterface $request,
+        ResponseInterface $response,
+        LoggerInterface $logger
+    ) {
+        parent::initController($request, $response, $logger);
+        $lC = new Login();
+        if($lC->getLoggedUserId() == 0)
+                return $this->response->redirect(site_url('Login'));
+    }
+
     public function index()
     {
         return view('zlecenia');
     }
 	public function __construct() {
+        helper('url');
 		$this->zlecenie_model = new ZleceniaModel();
 	}
 
@@ -43,8 +57,15 @@ class Zlecenia extends BaseController
             'opis_usterki' => 'required|string',
             'data_przyjecia' => 'required',
             'dni_naprawy' => 'required|integer',
-            'id_klient' => 'required|integer',
+            'id_klient' => 'required',
             'id_serwisant' => 'required|integer',
+            'czy_zasilacz' => 'required',
+            'czy_plyty' => 'required',
+            'czy_opak' => 'required',
+            'czy_kable' => 'required',
+            'czy_ekspres' => 'required',
+            'czy_zewn' => 'required',
+            'czy_gwarancja' => 'required'
         ]);
 		if($validation->withRequest($this->request)->run()){
             $session->setFlashdata('msg', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>fdfsdfsdfdsfe!</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
@@ -55,6 +76,7 @@ class Zlecenia extends BaseController
 			
 			try{
 				$this->zlecenie_model->insert($data);
+                return $this->response->redirect(site_url('Zlecenia/Details/' . $this->zlecenie_model->getInsertID()));
                 $session->setFlashdata('msg', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Zlecenie dodane pomyślnie!</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
             }
@@ -63,9 +85,12 @@ class Zlecenia extends BaseController
 			}
          }
         }
+
 		echo view('zleceniaDodaj',$data);
 
     }
+
+
 
     public function Details($id = NULL)
     {
@@ -112,8 +137,9 @@ class Zlecenia extends BaseController
 
         return $z;
     }
-    public function Zakoncz($id, $opis_naprawy)
+    public function Zakoncz($id, $opis_naprawy = "")
     {
+
         $date = date("Y-m-d h:i:s");
         $zM = new ZleceniaModel();
         $data = [
@@ -124,6 +150,21 @@ class Zlecenia extends BaseController
         ];
         
         $zM->save($data);
+
+        return redirect()->to(site_url('/Zlecenia/Details/' . $id)); 
+    }
+    public function getUslugi($id_zlecenia)
+    {
+        $zM = new ZleceniaModel();
+        $zU = new ZleceniaUslugiModel();
+        $uM = new UslugiModel();
+
+        //$uC = new Uslugi();
+
+        $uslugi = $zU->where('id_zlecenia', $id_zlecenia)->findAll();
+
+        return $uslugi;
+
     }
     public function Rozpocznij($id)
     {
@@ -134,6 +175,8 @@ class Zlecenia extends BaseController
         ];
         
         $zM->save($data);
+
+        return redirect()->to(site_url('/Zlecenia/Details/' . $id)); 
     }
     public function PotwierdzOdbior($id)
     {
@@ -146,6 +189,8 @@ class Zlecenia extends BaseController
         ];
         
         $zM->save($data);
+
+        return redirect()->to(site_url('/Zlecenia/Details/' . $id)); 
     }
     public function PonownieRozpocznij($id)
     {
@@ -158,6 +203,8 @@ class Zlecenia extends BaseController
         ];
         
         $zM->save($data);
+
+        return redirect()->to(site_url('/Zlecenia/Details/' . $id)); 
     }
     public function listUslugi($id)
     {

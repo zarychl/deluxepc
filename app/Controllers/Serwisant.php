@@ -26,7 +26,8 @@ class Serwisant extends BaseController
   }
   public function getCurrent()
   {
-    $curr = $this->serwisant_model->find('1');
+    $session = session();
+    $curr = $this->serwisant_model->find($session->get('loggedUserId'));
     return $curr;
   }
 

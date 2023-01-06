@@ -26,14 +26,14 @@ $allKlienci = $kC->getAllKlienci();
                     <?= \Config\Services::session()->getFlashdata('msg'); ?>
                     <form class="insert-form" method="post" action="<?= base_url() ?>/Zlecenia/Dodaj">
 
-                    <input class="form-control" hidden id="klientId" name="klientId">
+                    
                     <div class="row">
                         <div class="col-5">
                         <label>Klient:</label>
                             <div class="input-group mb-3">
                                 <!-- <input type="text" class="form-control" disabled id="klient" name="klient"> -->
 
-                                <select class="form-control" value="" disabled name="klient" id="klient">
+                                <select class="form-control" value="" readonly name="id_klient" id="id_klient">
                                     <option></option>
                                     <?php 
                                         foreach($allKlienci as $k)
@@ -52,7 +52,7 @@ $allKlienci = $kC->getAllKlienci();
 
                         <div class="col-4">
                             <label>Serwisant: </label>
-                            <input value="<?php echo $serwisant['id']; ?>" class="form-control" hidden id="serwisantId" name="serwisantId">
+                            <input value="<?php echo $serwisant['id']; ?>" class="form-control" hidden id="id_serwisant" name="id_serwisant">
                             <input value="<?php echo $serwisant['nazwisko'] . " " . $serwisant['imie'] . " #" . $serwisant['id']; ?>" class="form-control" disabled id="serwisant" name="serwisant">
                         </div>
                     </div>
@@ -186,7 +186,6 @@ $allKlienci = $kC->getAllKlienci();
             </div>
         </div>
         </div>
-
         
 
         <script>
@@ -205,7 +204,7 @@ $allKlienci = $kC->getAllKlienci();
         });
 
         $("#getklient").click(function (){
-            document.getElementById('klient').value = $("#getklient").data("klientid");
+            document.getElementById('id_klient').value = $("#getklient").data("klientid");
             $("#klientModal").modal("hide");
         });
         </script>

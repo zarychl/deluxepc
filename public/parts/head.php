@@ -8,7 +8,9 @@
         <meta name="author" content="" />
         <title>Dashboard - DeluxePC</title>
         <link id="favicon" rel="shortcut icon" type="image/png" href="iconW.png" />
-        <?php date_default_timezone_set('Europe/Warsaw');?>
+        <?php
+        date_default_timezone_set('Europe/Warsaw');
+        ?>
 
         <link href="/css/styles.css" rel="stylesheet" />
 
@@ -67,7 +69,7 @@
                         <!-- <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li> -->
-                        <li><a class="dropdown-item" href="#!">Wyloguj</a></li>
+                        <li><a class="dropdown-item" href="/Login/End">Wyloguj</a></li>
                     </ul>
                 </li>
             </ul>
