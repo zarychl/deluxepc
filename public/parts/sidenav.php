@@ -4,7 +4,9 @@ use App\Controllers\Serwisant;
 $sC = new Serwisant;
 
 $currSerwisant = $sC->getCurrent();
-$currSerwisant = $currSerwisant['nazwisko'] . " " . $currSerwisant['imie'];
+if(!empty($currSerwisant['nazwisko']))
+    $currSerwisant = $currSerwisant['nazwisko'] . " " . $currSerwisant['imie'];
+else $currSerwisant = "";
 ?>
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">

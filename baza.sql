@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 06 Sty 2023, 20:23
+-- Czas generowania: 23 Sty 2023, 18:13
 -- Wersja serwera: 10.4.24-MariaDB
 -- Wersja PHP: 8.1.4
 
@@ -184,7 +184,9 @@ INSERT INTO `zleceniauslugi` (`id`, `id_zlecenia`, `id_uslugi`, `ilosc`, `custom
 (14, 8, 11, '1.00', '100.00', NULL, NULL, '2022-12-27 12:07:57'),
 (15, 8, 11, '1.00', '100.00', NULL, NULL, '2022-12-27 12:12:12'),
 (16, 8, 6, '1.00', NULL, NULL, NULL, '2022-12-27 12:12:37'),
-(17, 25, 1, '1.00', NULL, NULL, NULL, '2023-01-06 10:49:00');
+(17, 25, 1, '1.00', NULL, NULL, NULL, '2023-01-06 10:49:00'),
+(18, 8, 5, '1.00', NULL, NULL, NULL, '2023-01-19 13:34:06'),
+(19, 8, 11, '1.00', '200.00', NULL, NULL, NULL);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -256,7 +258,7 @@ ALTER TABLE `zlecenia`
 -- AUTO_INCREMENT dla tabeli `zleceniauslugi`
 --
 ALTER TABLE `zleceniauslugi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Ograniczenia dla zrzutów tabel

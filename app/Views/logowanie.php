@@ -40,7 +40,7 @@ $loginError = $session->getFlashdata('err');
                                                 <label for="inputPassword">Hasło</label>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <button class="form-control button btn-primary" type='submit'>Login</button>
+                                                <button class="form-control button btn-primary" type='submit'>Zaloguj</button>
                                             </div>
                                         </form>
                                     </div>
