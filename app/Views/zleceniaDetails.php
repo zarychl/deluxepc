@@ -153,6 +153,14 @@ $z = $zC->getZlecenie($id);
 
 
                     <hr>
+                    <a class="btn btn-secondary dropdown-toggle float-end" style="margin-left:5px;" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-print"></i> Drukuj...
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/printer/confdoc/<?php echo $z['id'];?>"><i class="fa-solid fa-file-circle-check"></i> Potwierdzenie przyjęcia</a>
+                        <a class="dropdown-item" href="/printer/label/<?php echo $z['id'];?>"><i class="fa-solid fa-tag"></i> Etykietę</a>
+                    </div>
                     <?php
                     //oczekuje na naprawę
                     if($z['status'] == 0)
