@@ -166,6 +166,22 @@ class Zlecenia extends BaseController
         return $uslugi;
 
     }
+    public function Edytuj($id = NULL)
+    {
+        
+        $zM = new ZleceniaModel();
+        $session = \Config\Services::session();
+		$data = $this->request->getVar();
+        if(!empty($data))
+        {
+            $zM->save($data);
+            return redirect()->to(site_url('/Zlecenia/Details/' . $data['id'])); 
+        }
+        if(!isset($id))
+            return redirect()->to(site_url('/Zlecenia')); 
+        $data['id'] = $id;
+        return view('zleceniaEdytuj', $data);
+    }
     public function Rozpocznij($id)
     {
         $zM = new ZleceniaModel();
@@ -287,7 +303,7 @@ class Zlecenia extends BaseController
     {
         $allZlecenia = $this->zlecenie_model->findAll();
         $sM = new SerwisantModel();
-
+        $express = '';
         echo '<div class="card-body">
         <table id="datatablesZlecenia" class="display table table-striped table-hover">
             <thead>
@@ -314,11 +330,14 @@ class Zlecenia extends BaseController
 
         foreach($allZlecenia as $r)
         {
+            if($r['czy_ekspres'] == 1) $express = " <i title='Ekspres' class='fa-solid fa-truck-fast'>Ekspres</i>";
+            else $express = '';
+
             echo '<tr class="clickable-row" data-href="/Zlecenia/Details/'. $r['id'] .'">';
             echo '<td>'. $r['id'] .'</td>';
             echo '<td>'. $r['nazwa'] .'</td>';
             echo '<td>'. $r['serial'] .'</td>';
-            echo '<td>'. $r['data_przyjecia'] .'</td>';
+            echo '<td>'. $r['data_przyjecia'] . $express .'</td>';
 
             $s = $sM->find($r['id_serwisant']);
             if(!isset($s['nazwisko']))

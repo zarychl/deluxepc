@@ -48,6 +48,19 @@ class Klient extends BaseController
     return "$name<br> $addr [$last]";
   }
 
+  public function Dodaj()
+  {
+    $kM = new KlientModel();
+    $data = $this->request->getVar(); 
+    if(!empty($data))
+    {
+		  $data = $this->request->getVar();
+      $kM->save($data);
+      return redirect()->to(site_url('/Zlecenia/Dodaj')); 
+    }
+    return view('klient_dodaj');
+  }
+
   public function index()
   {
       //return view('klienci');

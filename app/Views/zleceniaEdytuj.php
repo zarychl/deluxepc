@@ -5,13 +5,18 @@ use App\Controllers\Zlecenia;
 use App\Controllers\Klient;
 use App\Controllers\Serwisant;
 
+if(!isset($id))
+    redirect()->to(site_url('/Zlecenia'));
+
 $zC = new Zlecenia();
 $kC = new Klient();
 $sC = new Serwisant();
 
-$serwisant = $sC->getCurrent();
+$z = $zC->getZlecenie($id);
 
-$allKlienci = $kC->getAllKlienci();
+$serwisant = $sC->getSerwisant($z['id_serwisant']);
+
+$k = $kC->getKlient($z['id_klient']);
 ?>
 <div id="layoutSidenav">
     <?php include_once("parts/sidenav.php"); ?>
@@ -19,12 +24,12 @@ $allKlienci = $kC->getAllKlienci();
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Zlecenia - Dodaj nowe</h1>
+            <h1 class="mt-4">Zlecenie <span style="color:gray">#<?php echo $z['id'] ?> </span>- Edytuj <span style="color:gray">[<?php echo $z['nazwa'] ?>]</span></h1>
                 <div class="card mb-4">
                     <div class="card-body">
 
                     <?= \Config\Services::session()->getFlashdata('msg'); ?>
-                    <form class="insert-form" method="post" action="<?= base_url() ?>/Zlecenia/Dodaj">
+                    <form class="insert-form" method="post" action="<?= base_url() ?>/Zlecenia/Edytuj">
 
                     
                     <div class="row">
@@ -36,17 +41,12 @@ $allKlienci = $kC->getAllKlienci();
                                 <select class="form-control" value="" readonly name="id_klient" id="id_klient">
                                     <option></option>
                                     <?php 
-                                        foreach($allKlienci as $k)
-                                        {
-                                            echo '<option value="'. $k['id'] .'">' . $kC->getKlientVCard($k['id']) . '</option>';
-                                        }
+                                            echo '<option disabled selected value="'. $k['id'] .'">' . $kC->getKlientVCard($k['id']) . '</option>';
                                     ?>
                                     
                                 </select>
 
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="button" id="klientSelect">Wybierz</button>
-                                </div>
+
                             </div>
                         </div>
 
@@ -59,82 +59,85 @@ $allKlienci = $kC->getAllKlienci();
 
                         <div class="row">
                             <div class="col">
+                                <input type="hidden" name="id" value="<?php echo $z['id']; ?>">
                             <label>Nazwa</label>
-                            <input name="nazwa" type="text" class="form-control" placeholder="Nazwa">
+                            <input value="<?php echo $z['nazwa'];?>" name="nazwa" type="text" class="form-control" placeholder="Nazwa">
                             <label>Numer seryjny</label>
-                            <input name="serial" type="text" class="form-control" placeholder="Numer seryjny">
+                            <input value="<?php echo $z['serial'];?>" name="serial" type="text" class="form-control" placeholder="Numer seryjny">
                             <label>Opis usterki</label>
-                            <textarea name="opis_usterki" rows="5" class="form-control" placeholder="Opis usterki..."></textarea>
+                            <textarea value="" name="opis_usterki" rows="5" class="form-control" placeholder="Opis usterki..."><?php echo $z['opis_usterki'];?></textarea>
+                            <label>Opis naprawy</label>
+                            <textarea value="" name="opis_naprawy" rows="5" class="form-control" placeholder="Opis naprawy..."><?php echo $z['opis_naprawy'];?></textarea>
                             </div>
                             <div class="col-3">
                             <label>Data przyjęcia</label>
-                            <input type="datetime-local" value="<?php echo date("Y-m-d\TH:i"); ?>" class="form-control" placeholder="Data przyjecia">
+                            <input type="datetime-local" value="<?php echo $z['data_przyjecia'];?>" class="form-control" placeholder="Data przyjecia">
                             
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_kable" id="czy_kable">
+                                <input <?php if($z['czy_kable'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" value="" name="czy_kable" id="czy_kable">
                                 <label class="form-check-label" for="czy_kable">
                                 Kable
                                 </label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_zasilacz"  id="czy_zasilacz">
+                                <input <?php if($z['czy_zasilacz'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" value="" name="czy_zasilacz"  id="czy_zasilacz">
                                 <label class="form-check-label" for="czy_zasilacz">
                                 Zasilacz
                                 </label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_plyty" id="czy_plyty">
+                                <input <?php if($z['czy_plyty'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" value="" name="czy_plyty" id="czy_plyty">
                                 <label class="form-check-label" for="czy_plyty">
                                 Płyty
                                 </label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_opak" id="czy_opak">
+                                <input <?php if($z['czy_opak'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" value="" name="czy_opak" id="czy_opak">
                                 <label class="form-check-label" for="czy_opak">
                                 Opakowanie
                                 </label>
                             </div>
 
                             <label>Dodatkowe wyposażenie</label>
-                            <textarea name="wyp_inne" class="form-control" rows="5" placeholder="Dodatkowe elementy..."></textarea>
+                            <textarea name="wyp_inne" class="form-control" rows="5" placeholder="Dodatkowe elementy..."><?php echo $z['wyp_inne'];?></textarea>
 
                             </div>
                             <div class="col-3">
                             <label>Naprawa w ciągu (dni)</label>
-                            <input name="dni_naprawy" id="dni_naprawy" type="number" min="1" value="7" class="form-control">
+                            <input name="dni_naprawy" id="dni_naprawy" type="number" min="1" value="<?php echo $z['dni_naprawy'];?>" class="form-control">
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_gwarancja" id="czy_gwarancja">
+                                <input <?php if($z['czy_gwarancja'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" value="" name="czy_gwarancja" id="czy_gwarancja">
                                 <label class="form-check-label" for="czy_gwarancja">
                                 Gwarancja
                                 </label>
                             </div>  
                             
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_ekspres" id="czy_ekspres">
+                                <input <?php if($z['czy_ekspres'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" name="czy_ekspres" id="czy_ekspres">
                                 <label class="form-check-label" for="czy_ekspres">
                                 Ekspres
                                 </label>
                             </div> 
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" name="czy_zew" id="czy_zew">
-                                <label class="form-check-label" for="czy_zew">
+                                <input <?php if($z['czy_zewn'] == 1) echo 'checked'?> class="form-check-input" type="checkbox" name="czy_zew" id="czy_zew">
+                                <label class="form-check-label" for="czy_zewn">
                                 Serwis zewnętrzny
                                 </label>
                             </div> 
                             <br>
                             <label>Uwagi</label>
-                            <textarea name="uwagi" class="form-control" rows="5" placeholder="Uwagi"></textarea>
+                            <textarea name="uwagi" class="form-control" rows="5" placeholder="Uwagi"><?php echo $z['uwagi'];?></textarea>
 
                             </div>
 
                             <div class="card-footer">
                             <div class="col">
-                                <button class="btn btn-success float-end" type="submit" value="Submit"><i class="fa-solid fa-plus"></i> Dodaj</button>
+                                <button class="btn btn-warning float-end" type="submit" value="Submit"><i class="fa-solid fa-pencil"></i> Edytuj</button>
                                     </div>
                             </div>
 
@@ -168,18 +171,7 @@ $allKlienci = $kC->getAllKlienci();
                 </thead>
 
                 <tbody>
-                <?php 
-                    foreach($allKlienci as $k)
-                    {
-                        echo '<tr><td>'. $k['id'] .'</td>
-                            <td>'. $k['nazwa'] .'</td>
-                            <td>'. $k['ulica'] . ", " . $k['kod'] . " " . $k['miasto'] .'</td>
-                            <td>'. $k['tel1'] . "<br>" . $k['tel2'] .'</td>
-                            <td>'. $k['mail'] .'</td>
-                            <td><button class="btn btn-primary getklient-btn" id="getklient" data-klientid="'. $k['id']  .'" type="button" ><i class="fa-solid fa-arrow-right-to-bracket"></i> Wybierz</button></td></tr>';
-                    }
-                    
-                ?>
+                
                 </tbody>
                 </table>
            <!-- end tabekla -->
@@ -204,8 +196,8 @@ $allKlienci = $kC->getAllKlienci();
             $("#klientModal").modal("show");
         });
 
-        $(".getklient-btn").click(function (){
-            document.getElementById('id_klient').value = $(this).data("klientid");
+        $("#getklient").click(function (){
+            document.getElementById('id_klient').value = $("#getklient").data("klientid");
             $("#klientModal").modal("hide");
         });
         </script>

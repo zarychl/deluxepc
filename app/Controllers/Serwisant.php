@@ -30,7 +30,11 @@ class Serwisant extends BaseController
     $curr = $this->serwisant_model->find($session->get('loggedUserId'));
     return $curr;
   }
-
+  public function getSerwisant($id)
+  {
+    $curr = $this->serwisant_model->find($id);
+    return $curr;
+  }
   public function getAll()
   {
     $all = $this->serwisant_model->findAll();

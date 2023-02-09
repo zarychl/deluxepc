@@ -189,7 +189,7 @@ $z = $zC->getZlecenie($id);
                     }
 
                     ?>
-                    <button style="margin-left:5px;" class="btn btn-warning float-end" type="submit" value="Submit"><i class="fa-solid fa-pencil"></i> Edytuj</button>&nbsp;
+                    <a href="/Zlecenia/Edytuj/<?php echo $z['id']; ?>" style="margin-left:5px;" class="btn btn-warning float-end" type="submit" value="Submit"><i class="fa-solid fa-pencil"></i> Edytuj</a>&nbsp;
                     
                         </div>
                 </div>
